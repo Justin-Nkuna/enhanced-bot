@@ -7,14 +7,12 @@
         return;
       }
 
-      // Set language
-      embeddedservice_bootstrap.settings.language = 'en_US'; // Adjust language as needed
-
-      // Initialize the Embedded Messaging with correct Deployment ID, Chatbot, and URL
+      // Set language and initialize embedded service
+      embeddedservice_bootstrap.settings.language = 'en_US'; // Set language as needed
       embeddedservice_bootstrap.init(
         '00Ddw0000007iNh', // Deployment ID
         'ChatBot_Messaging', // Chat Configuration Name
-        'https://capeunionmart--dev.sandbox.my.site.com/ESWChatBotMessaging1728460303739', // Your URL
+        'https://capeunionmart--dev.sandbox.my.site.com/ESWChatBotMessaging1728460303739', // Site URL
         {
           scrt2URL: 'https://capeunionmart--dev.sandbox.my.salesforce-scrt.com' // Optional settings
         }
@@ -24,16 +22,16 @@
     }
   }
 
-  // Load the Salesforce Embedded Service script first
+  // Ensure the Salesforce Embedded Service script is loaded first
   if (!window.embedded_svc) {
     var script = document.createElement('script');
-    script.setAttribute('src', 'https://service.force.com/embeddedservice/5.0/esw.min.js');
+    script.setAttribute('src', 'https://service.force.com/embeddedservice/5.0/esw.min.js'); // Load Salesforce Embedded Service script
     script.onload = function() {
       console.log("Salesforce Embedded Service script loaded.");
-      initEmbeddedMessaging(); // Initialize after script is loaded
+      initEmbeddedMessaging(); // Initialize chat once the script has loaded
     };
     document.body.appendChild(script);
   } else {
-    initEmbeddedMessaging(); // If script already loaded, initialize right away
+    initEmbeddedMessaging(); // If script is already loaded, initialize directly
   }
 </script>
