@@ -1,18 +1,19 @@
 <script type="text/javascript">
   function initEmbeddedMessaging() {
     try {
-      // Check if embeddedservice_bootstrap is available
-      if (!window.embeddedservice_bootstrap) {
-        console.error("embeddedservice_bootstrap is not defined");
+      // Check if embeddedservice_bootstrap is available after script loading
+      if (typeof embeddedservice_bootstrap === 'undefined') {
+        console.error("embeddedservice_bootstrap is not defined. Please check the Salesforce Embedded Service configuration.");
         return;
       }
 
       // Set language and initialize embedded service
       embeddedservice_bootstrap.settings.language = 'en_US'; // Set language as needed
+
       embeddedservice_bootstrap.init(
-        '00Ddw0000007iNh', // Deployment ID
-        'ChatBot_Messaging', // Chat Configuration Name
-        'https://capeunionmart--dev.sandbox.my.site.com/ESWChatBotMessaging1728460303739', // Site URL
+        '00Ddw0000007iNh', // Deployment ID (make sure this is correct in Salesforce)
+        'ChatBot_Messaging', // Chat Configuration Name (correct name from Salesforce)
+        'https://capeunionmart--dev.sandbox.my.site.com/ESWChatBotMessaging1728460303739', // Website URL
         {
           scrt2URL: 'https://capeunionmart--dev.sandbox.my.salesforce-scrt.com' // Optional settings
         }
@@ -23,15 +24,19 @@
   }
 
   // Ensure the Salesforce Embedded Service script is loaded first
-  if (!window.embedded_svc) {
+  if (typeof embedded_svc === 'undefined') {
     var script = document.createElement('script');
-    script.setAttribute('src', 'https://service.force.com/embeddedservice/5.0/esw.min.js'); // Load Salesforce Embedded Service script
+    script.setAttribute('src', 'https://service.force.com/embeddedservice/5.0/esw.min.js'); // Ensure you're loading from Salesforce
     script.onload = function() {
-      console.log("Salesforce Embedded Service script loaded.");
-      initEmbeddedMessaging(); // Initialize chat once the script has loaded
+      console.log("Salesforce Embedded Service script loaded successfully.");
+      initEmbeddedMessaging(); // Initialize after the script is fully loaded
+    };
+    script.onerror = function() {
+      console.error("Failed to load Salesforce Embedded Service script. Please check the URL.");
     };
     document.body.appendChild(script);
   } else {
-    initEmbeddedMessaging(); // If script is already loaded, initialize directly
+    // If already defined, call the function directly
+    initEmbeddedMessaging();
   }
 </script>
