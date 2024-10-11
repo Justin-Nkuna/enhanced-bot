@@ -1,19 +1,20 @@
 <script type="text/javascript">
   function initEmbeddedMessaging() {
     try {
-      // Check if embeddedservice_bootstrap is available after script loading
-      if (typeof embeddedservice_bootstrap === 'undefined') {
-        console.error("embeddedservice_bootstrap is not defined. Please check the Salesforce Embedded Service configuration.");
+      // Ensure that embeddedservice_bootstrap is available
+      if (!window.embeddedservice_bootstrap) {
+        console.error("embeddedservice_bootstrap is not defined.");
         return;
       }
 
-      // Set language and initialize embedded service
-      embeddedservice_bootstrap.settings.language = 'en_US'; // Set language as needed
+      // Set the language
+      embeddedservice_bootstrap.settings.language = 'en_US'; // Adjust language as needed
 
+      // Initialize Embedded Messaging with proper Deployment ID, Chatbot, and URL
       embeddedservice_bootstrap.init(
-        '00Ddw0000007iNh', // Deployment ID (make sure this is correct in Salesforce)
-        'ChatBot_Messaging', // Chat Configuration Name (correct name from Salesforce)
-        'https://capeunionmart--dev.sandbox.my.site.com/ESWChatBotMessaging1728460303739', // Website URL
+        '00Ddw0000007iNh', // Deployment ID (Ensure it's correct in Salesforce)
+        'Gihub_Deployment', // Chat Configuration Name (Confirm this matches Salesforce setup)
+        'https://capeunionmart--dev.sandbox.my.site.com/ESWGihubDeployment1728631807080', // The URL for your chat deployment
         {
           scrt2URL: 'https://capeunionmart--dev.sandbox.my.salesforce-scrt.com' // Optional settings
         }
@@ -23,20 +24,22 @@
     }
   }
 
-  // Ensure the Salesforce Embedded Service script is loaded first
-  if (typeof embedded_svc === 'undefined') {
+  // Ensure Salesforce Embedded Service script is loaded before calling the init
+  if (!window.embedded_svc) {
     var script = document.createElement('script');
-    script.setAttribute('src', 'https://service.force.com/embeddedservice/5.0/esw.min.js'); // Ensure you're loading from Salesforce
+    script.setAttribute('src', 'https://service.force.com/embeddedservice/5.0/esw.min.js');
     script.onload = function() {
       console.log("Salesforce Embedded Service script loaded successfully.");
-      initEmbeddedMessaging(); // Initialize after the script is fully loaded
+      initEmbeddedMessaging(); // Initialize after the script is loaded
     };
     script.onerror = function() {
-      console.error("Failed to load Salesforce Embedded Service script. Please check the URL.");
+      console.error("Failed to load Salesforce Embedded Service script.");
     };
     document.body.appendChild(script);
   } else {
-    // If already defined, call the function directly
-    initEmbeddedMessaging();
+    initEmbeddedMessaging(); // If script is already loaded, initialize right away
   }
 </script>
+
+<!-- Optional Bootstrap JS if needed for the UI, but not required for Embedded Messaging -->
+<script type="text/javascript" src="https://capeunionmart--dev.sandbox.my.site.com/ESWGihubDeployment1728631807080/assets/js/bootstrap.min.js"></script>
