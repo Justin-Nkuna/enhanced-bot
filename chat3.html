@@ -4,7 +4,6 @@
   <title>Embedded Messaging Chat</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>   
-  <script src="https://service.force.com/embeddedservice/5.0/esw.min.js"></script>
 </head>
 <body>
   <div id="embedded-chat"></div>
@@ -13,7 +12,7 @@
     // Function to initialize Embedded Messaging
     function initEmbeddedMessaging() {
       // Check if embeddedservice_bootstrap is available
-      if (!window.embeddedservice_bootstrap) {
+      if (typeof embeddedservice_bootstrap === 'undefined') {
         console.error("embeddedservice_bootstrap is not defined.");
         return;
       }
@@ -34,17 +33,25 @@
       );
     }
 
-    // Ensure esw.min.js is loaded before initializing
-    if (window.embedded_svc) {
-      initEmbeddedMessaging();
-    } else {
+    // Load the Salesforce Embedded Service script dynamically
+    function loadEmbeddedServiceScript(callback) {
       var script = document.createElement('script');
       script.src = 'https://service.force.com/embeddedservice/5.0/esw.min.js';
-      script.onload = initEmbeddedMessaging; // Call init after the script is loaded
+      script.onload = callback; // Call init after the script is loaded
       script.onerror = function() {
         console.error("Failed to load Salesforce Embedded Service script.");
       };
       document.body.appendChild(script);
+    }
+
+    // Check if the embedded service script is already loaded
+    if (typeof embeddedservice_bootstrap !== 'undefined') {
+      initEmbeddedMessaging();
+    } else {
+      loadEmbeddedServiceScript(function() {
+        // Wait a moment for embeddedservice_bootstrap to be defined
+        setTimeout(initEmbeddedMessaging, 1000);
+      });
     }
   </script>
 </body>
