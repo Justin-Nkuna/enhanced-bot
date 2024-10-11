@@ -16,6 +16,12 @@
       try {
         console.log('Initializing Embedded Messaging');
 
+        // Check if embeddedservice_bootstrap is loaded before initializing it
+        if (!window.embeddedservice_bootstrap) {
+          console.error("embeddedservice_bootstrap is not defined");
+          return;
+        }
+
         // Ensure the Embedded Service is bootstrapped before initializing settings
         embedded_svc.bootstrapEmbeddedService();
 
@@ -40,7 +46,10 @@
     if (!window.embedded_svc) {
       var s = document.createElement('script');
       s.setAttribute('src', 'https://service.force.com/embeddedservice/5.0/esw.min.js');
-      s.onload = initEmbeddedMessaging; // Corrected onload event assignment
+      s.onload = function() {
+        console.log('esw.min.js loaded successfully');
+        initEmbeddedMessaging();
+      };
       document.body.appendChild(s);
     } else {
       initEmbeddedMessaging();
